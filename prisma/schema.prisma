@@ -1,0 +1,30 @@
+// Prisma Schema for AI Editing Compiler
+// This defines the Project model that would be used with SQLite in a full Next.js setup.
+// In this Vite environment, we use IndexedDB as the browser-side persistence layer.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Project {
+  id            String   @id @default(cuid())
+  name          String
+  fileName      String
+  filePath      String   // Safe, validated path
+  fileSize      Int      // File size in bytes
+  duration      Float    // Duration in seconds (extracted via FFprobe/Video API)
+  width         Int      // Video width in pixels
+  height        Int      // Video height in pixels
+  fps           Float    // Frames per second
+  mimeType      String   // e.g., "video/mp4"
+  fileSignature String   // First 12 bytes hex (MP4 magic bytes validation)
+  uploadedAt    DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  status        String   @default("uploaded") // uploaded, processing, ready, error
+  errorMessage  String?
+}
